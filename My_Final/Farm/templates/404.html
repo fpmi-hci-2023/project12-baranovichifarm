@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+    <style>
+        .block_for_img_404 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -290px;
+            margin-top: -250px;
+        }
+        .img_404 {
+            width: 600px;
+            height: auto;
+        }
+        .block_home_img {
+            position: absolute;
+            width: 200px;
+            padding: 5px 15px;
+            background: #005C7C;
+            border-radius: 20px;
+            left: 50%;
+            top: 50%;
+            margin-left: -115px;
+            margin-top: 50px;
+        }
+        .home_img {
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+
+    <div class="block_for_img_404">
+        <img src="{% static '404.png' %}" class="img_404">
+    </div>
+
+    <a href="{% url 'home_page' %}">
+        <div class="block_home_img">
+            <img src="{% static 'home.png' %}" class="home_img">
+        </div>
+    </a>
+</body>
+</html>

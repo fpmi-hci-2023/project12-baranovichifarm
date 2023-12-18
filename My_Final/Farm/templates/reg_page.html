@@ -1,0 +1,62 @@
+{% extends "Home_with_logo.html" %}
+
+{% block title %} Registration {% endblock %}
+
+{% block style %}
+    <style>
+        .block_content_1 {
+            position: absolute;
+            left: 50%;
+            top: 210px;
+            margin-left: -150px;
+            background: rgba(0,0,0,0);
+        }
+        .reg_button {
+            margin-left: 80px;
+            margin-top: 20px;
+        }
+        .one {
+          background: #FFF4ED;
+          padding: 50px 20px;
+          text-align: center;
+        }
+        .one h1 {
+          font-family: 'Righteous', cursive;
+          position: relative;
+          color: #3CA1D9;
+          display: inline-block;
+          border-top: 2px solid;
+          border-bottom: 2px solid;
+          font-size: 3em;
+          padding: 11px 60px;
+          margin: 0;
+          line-height: 1;
+        }
+        .one h1:before, .one h1:after {
+          content: "";
+          position: absolute;
+          top: 0;
+          width: 30px;
+          height: 100%;
+          border-left: 2px solid;
+          border-right: 2px solid;
+          background: repeating-linear-gradient(180deg, transparent, transparent 2px, #3CA1D9 2px, #3CA1D9 4px);
+        }
+        .one h1:before {left: 0;}
+        .one h1:after {right: 0;}
+        @media (max-width: 420px) {
+          .one h1 {font-size: 2em;}
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="one"><h1>Create your personal account</h1></div>
+    <div class="block_content_1">
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            {{ form.as_myp }}
+            <input class="reg_button" type="submit" value="Create Account">
+        </form>
+    </div>
+{% endblock %}
