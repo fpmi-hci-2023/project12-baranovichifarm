@@ -1,0 +1,133 @@
+{% extends "Home_with_logo.html" %}
+
+{% block title %} DB {% endblock %}
+
+{% block style %}
+    <style>
+        table {
+            margin-top: 5px;
+            font-size: 12px;
+            border: none;
+        }
+        .content_block_1 {
+            position: absolute;
+            top: 30px;
+            margin-left: 20px;
+            width: 1400px;
+        }
+        .row_1 {
+            background: #ffe9ed;
+        }
+        .center_col {
+            text-align: center;
+        }
+        .long_col {
+            text-align: center;
+            max-width: 200px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden
+        }
+        .del_col {
+            background: #f1ebed;
+            border-color: #f1ebed;
+        }
+        .del_button {
+            display: inline-block;
+            border: 1px solid #f1ebed;
+            background: #f1ebed;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% load static %}
+
+    <div class="content_block_1">
+        <b><font size="4">Registered users (table "User"):</font></b>
+        <table>
+            <thead>
+                <tr class="row_1">
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Login</th>
+                    <th class="del_col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td class="center_col">{{ user.id }}</td>
+                        <td class="center_col">{{ user.username }}</td>
+                        <td class="center_col">{{ user.password }}</td>
+                        <td class="center_col">{{ user.first_name }}</td>
+                        <td class="center_col">{{ user.last_name }}</td>
+                        <td class="center_col">{{ user.email }}</td>
+                        <td class="center_col">{{ user.phone_number }}</td>
+                        <td class="long_col">{{ user.address }}</td>
+                        <td class="center_col">{{ user.login }}</td>
+                        <td class="del_col">
+                            <form method="POST">
+                                <button class="del_button" formaction="{% url 'del_from_user' user.id %}">&#10006;</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="margin-top: 50px">
+            <b><font size="4">Confirmed orders (table "Order"):</font></b>
+        </div>
+        <table>
+            <thead>
+                <tr class="row_1">
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th style="min-width: 100px">Phone Number</th>
+                    <th>Address</th>
+                    <th style="min-width: 130px">Order Date</th>
+                    <th style="min-width: 130px">Delivery Date</th>
+                    <th>Comment</th>
+                    <th>Order Info</th>
+                    <th style="min-width: 100px">User</th>
+                    <th class="del_col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td class="center_col">{{ order.id }}</td>
+                        <td class="center_col">{{ order.user_type }}</td>
+                        <td class="center_col">{{ order.first_name }}</td>
+                        <td class="center_col">{{ order.last_name }}</td>
+                        <td class="center_col">{{ order.email }}</td>
+                        <td class="center_col">{{ order.phone_number }}</td>
+                        <td class="long_col">{{ order.address }}</td>
+                        <td class="center_col">{{ order.order_date }}</td>
+                        <td class="center_col">{{ order.delivery_date }}</td>
+                        <td class="long_col">{{ order.comment }}</td>
+                        <td class="long_col">{{ order.order_info }}</td>
+                        <td class="center_col">{{ order.user }}</td>
+                        <td class="del_col">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button class="del_button" formaction="{% url 'del_from_order' order.id %}">&#10006;</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

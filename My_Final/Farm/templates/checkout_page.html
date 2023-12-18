@@ -1,0 +1,181 @@
+{% extends "Home_with_logo.html" %}
+
+{% block title %} Checkout {% endblock %}
+
+{% block style %}
+    <style>
+        h2 {
+            margin-bottom: 15px;
+        }
+        .block_for_closed_pic {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: calc(-150px - 15vw);
+            margin-top: calc(-90px - 15vw);
+        }
+        .closed_pic {
+            width: calc(300px + 30vw);
+            height: auto;
+        }
+        .block_for_logo_1 {
+            position: absolute;
+            left: 50%;
+            margin-left: -150px;
+        }
+        .logo_1 {
+            width: 300px;
+            height: auto;
+        }
+        .block_content_1 {
+            position: absolute;
+            left: 50%;
+            top: 200px;
+            margin-left: -265px;
+            background: rgba(0,0,0,0);
+        }
+        .row_1 {
+            background: #ffe9ed;
+        }
+        .column_1 {
+            width: 250px;
+        }
+        .column_2, .column_3 {
+            width: 50px;
+        }
+        .form_buttons {
+            display: inline-block;
+            border: 1px solid white;
+            background: white;
+            cursor: pointer;
+        }
+        .block_content_2 {
+            margin-top: 100px;
+        }
+        .purchase_button {
+            display: inline-block;
+            width: 100px;
+            border: 1px solid black;
+            border-radius: 10px;
+            color: whitesmoke;
+            background: seagreen;
+            margin-top: 10px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .block_content_3 {
+            position: absolute;
+            left: 50%;
+            top: 200px;
+            margin-left: -180px;
+        }
+        .block_for_empty_1 {
+            position: absolute;
+            left: 50%;
+            top: 300px;
+            margin-left: -300px;
+        }
+        .empty_1 {
+            width: 300px;
+            height: auto;
+        }
+        .block_for_empty_2 {
+            position: absolute;
+            left: 50%;
+            top: 300px;
+        }
+        .empty_2 {
+            width: 400px;
+            height: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% load static %}
+
+    <div class="sign_block">
+        {% if signed_user %}
+            <div style="width: 150px; text-indent: 10px">
+                <img src="{% static 'profile.png' %}" width="13px">
+                {{ signed_user.username }}
+            </div>
+
+            <form method="POST">
+            {% csrf_token %}
+                <button class="sign_button" formaction="{% url 'home_page' %}" name="status" value=0>Sign out</button>
+            </form>
+        {% else %}
+            <form method="GET">
+                <button class="sign_button" formaction="{% url 'sign_in' %}">Sign in</button>
+            </form>
+        {% endif %}
+    </div>
+
+    {% if closed_status %}
+        <div class="block_for_closed_pic">
+            <a href="{% url 'home_page' %}">
+                <img src="{% static 'closed.png' %}" class="closed_pic" alt="">
+            </a>
+        </div>
+    {% else %}
+        {% if products %}
+            <div class="block_for_logo_1">
+                <img src="{% static 'logo1.png' %}" class="logo_1" alt="">
+            </div>
+
+            <div class="block_content_1">
+                <h2>Order Summary</h2>
+                <table>
+                    <thead>
+                        <tr class="row_1">
+                            <th class="column_1">Product</th>
+                            <th class="column_2">Price</th>
+                            <th class="column_3">Cost</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>{{ product.product }}</td>
+                                <td>{{ product.price }}</td>
+                                <td>{{ product.cost|floatformat:2 }}</td>
+                                <td>
+                                    <form method="POST" action="{% url 'add_to_basket' product.product_id %}">
+                                        {% csrf_token %}
+                                        <input type="number" min="0" max="999" value="{{ product.amount }}" name="amount" step="1">
+                                        <input class="form_buttons" type="submit" value="EDIT">
+                                        <button class="form_buttons" formaction="{% url 'del_from_basket' product.product_id %}">&#10006;</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h4>Order Total: {{ order_total }} BYN</h4>
+
+                <div class="block_content_2">
+                    <h2>Shipping & Billing Info</h2>
+                    <form method="POST" action="{% url 'checkout' %}" novalidate>
+                        {% csrf_token %}
+                        {{ form.as_myp }}
+                        <input type="submit" value="Purchase" class="purchase_button">
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="block_for_empty_1">
+                <img src="{% static 'empty_1.png' %}" class="empty_1">
+            </div>
+
+            <div class="block_for_empty_2">
+                <img src="{% static 'empty_2.png' %}" class="empty_2">
+            </div>
+
+            <div class="block_content_3">
+                <font color=#5a3c24 size="15">Your Cart is empty</font>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="data:;base64,=">
+    <style>
+        body {
+            background-color: #f1ebed;
+        }
+        .sign_block {
+            position: fixed;
+            right: 5px;
+            padding: 5px;
+            background: rgba(0,0,0,0);
+            z-index: 1000;
+        }
+        .sign_button {
+            display: inline-block;
+            width: 150px;
+            border: 1px solid black;
+            border-radius: 10px;
+            color: whitesmoke;
+            background: #4eb1ba;
+            margin-bottom: 2px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+    </style>
+    {% block style %}{% endblock %}
+</head>
+<body>
+    {% load static %}
+
+    <div class="sign_block">
+        {% if signed_user %}
+            <div style="width: 150px; text-indent: 10px">
+{#                <img src="https://img2.freepng.ru/20180401/klw/kisspng-user-profile-computer-icons-clip-art-profile-5ac092f6f2d337.1560498715225699749946.jpg" width="10px">#}
+                <img src="{% static 'profile.png' %}" width="13px">
+                {{ signed_user.username }}
+            </div>
+
+            <form method="POST">
+            {% csrf_token %}
+                <button class="sign_button" formaction="{% url 'home_page' %}" name="status" value=0>Sign out</button>
+            </form>
+        {% else %}
+            <form method="GET">
+                <button class="sign_button" formaction="{% url 'sign_in' %}">Sign in</button>
+            </form>
+        {% endif %}
+
+        <form method="GET">
+            <button class="sign_button" formaction="{% url 'checkout' %}">Go to Cart</button>
+        </form>
+    </div>
+    {% block body %}{% endblock %}
+</body>
+</html>
+
+
+
